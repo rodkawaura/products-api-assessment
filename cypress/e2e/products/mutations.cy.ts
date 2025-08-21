@@ -4,15 +4,16 @@ describe('POST /products/add', () => {
   const baseUrl = 'https://dummyjson.com/products';
 
   it('should add a new product', () => {
-    const newProduct = { title: 'BMW Pencil' };
-    cy.request({
-      method: 'POST',
-      url: `${baseUrl}/add`,
-      body: newProduct,
-      headers: { 'Content-Type': 'application/json' }
-    }).its('body').should((body) => {
-      expect(body).to.include(newProduct);
-      expect(body).to.have.property('id');
+    cy.fixture('new-product.json').then((newProduct) => {
+      cy.request({
+        method: 'POST',
+        url: `${baseUrl}/add`,
+        body: newProduct,
+        headers: { 'Content-Type': 'application/json' }
+      }).its('body').should((body) => {
+        expect(body).to.include(newProduct);
+        expect(body).to.have.property('id');
+      });
     });
   });
 
@@ -34,26 +35,29 @@ describe('PUT /products/:id', () => {
   const baseUrl = 'https://dummyjson.com/products';
 
   it('should update a product', () => {
-    const updatedProduct = { title: 'iPhone Galaxy +1' };
-    cy.request({
-      method: 'PUT',
-      url: `${baseUrl}/1`,
-      body: updatedProduct,
-      headers: { 'Content-Type': 'application/json' }
-    }).its('body').should((body) => {
-      expect(body).to.include({ id: 1, ...updatedProduct });
+    cy.fixture('update-product.json').then((updatedProduct) => {
+      cy.request({
+        method: 'PUT',
+        url: `${baseUrl}/1`,
+        body: updatedProduct,
+        headers: { 'Content-Type': 'application/json' }
+      }).its('body').should((body) => {
+        expect(body).to.include({ id: 1, ...updatedProduct });
+      });
     });
   });
 
   it('should return 404 for updating non-existent product', () => {
-    cy.request({
-      method: 'PUT',
-      url: `${baseUrl}/99999`,
-      body: { title: 'Does Not Exist' },
-      failOnStatusCode: false,
-      headers: { 'Content-Type': 'application/json' }
-    }).then((resp) => {
-      expect([404, 400]).to.include(resp.status);
+    cy.fixture('invalid-product.json').then((invalidProduct) => {
+      cy.request({
+        method: 'PUT',
+        url: `${baseUrl}/99999`,
+        body: invalidProduct,
+        failOnStatusCode: false,
+        headers: { 'Content-Type': 'application/json' }
+      }).then((resp) => {
+        expect([404, 400]).to.include(resp.status);
+      });
     });
   });
 });
