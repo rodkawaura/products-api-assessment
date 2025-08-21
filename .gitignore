@@ -1,0 +1,30 @@
+# Node.js dependencies
+node_modules/
+
+# Cypress output
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# IDEs/editors
+.vscode/
+.idea/
+*.swp
+
+# Build output
+dist/
+build/
+coverage/
